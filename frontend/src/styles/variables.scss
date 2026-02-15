@@ -1,0 +1,24 @@
+$menuText: var(--sidebar-text);
+$menuActiveText: var(--sidebar-active);
+$subMenuActiveText: var(--sidebar-sub-active-text);
+$menuBg: var(--sidebar-bg);
+$menuHover: var(--sidebar-hover);
+$subMenuBg: var(--sidebar-sub-bg);
+$subMenuHover: var(--sidebar-sub-hover);
+$sideBarWidth: 210px;
+
+$navText: var(--sidebar-text);
+$navActiveText: var(--sidebar-active);
+
+:export {
+  menuText: $menuText;
+  menuActiveText: $menuActiveText;
+  subMenuActiveText: $subMenuActiveText;
+  menuBg: $menuBg;
+  menuHover: $menuHover;
+  subMenuBg: $subMenuBg;
+  subMenuHover: $subMenuHover;
+  sideBarWidth: $sideBarWidth;
+  navText: $navText;
+  navActiveText: $navActiveText;
+}

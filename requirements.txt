@@ -1,0 +1,17 @@
+# Django 核心依赖
+Django==4.2.11
+djangorestframework==3.14.0
+django-cors-headers==4.3.1
+drf-spectacular==0.27.1
+python-dotenv==1.0.1
+
+# JWT 认证
+djangorestframework-simplejwt==5.3.1
+PyJWT==2.8.0
+
+# 数据库
+PyMySQL==1.1.0
+
+# 工具库
+Pillow==10.2.0
+requests==2.31.0
