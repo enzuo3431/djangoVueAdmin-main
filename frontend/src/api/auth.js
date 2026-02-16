@@ -39,6 +39,17 @@ export function changePassword(data) {
   })
 }
 
+export function uploadAvatar(data) {
+  return request({
+    url: '/auth/user/avatar/',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
+
 export function requestPasswordReset(data) {
   return request({
     url: '/auth/password/reset/request/',

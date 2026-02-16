@@ -3,13 +3,13 @@
     <el-row :gutter="20">
       <el-col :xs="24" :sm="24" :lg="8">
         <el-card class="user-card">
-          <div class="user-info">
+          <div class="profile-hero">
             <div class="avatar-section">
-              <div class="avatar-click" @click="handleAvatarClick">
-                <el-avatar :size="100" :src="userInfo.avatar || ''" icon="el-icon-user-solid" />
+              <div class="avatar-click" :class="{ uploading: avatarUploading }" @click="handleAvatarClick">
+                <el-avatar :size="96" :src="userInfo.avatar || ''" icon="el-icon-user-solid" />
                 <div class="avatar-mask">
                   <i class="el-icon-camera" />
-                  <span>更换头像</span>
+                  <span>{{ avatarUploading ? '上传中...' : '更换头像' }}</span>
                 </div>
               </div>
               <input
@@ -22,26 +22,36 @@
             </div>
             <div class="info-section">
               <h3>{{ userInfo.nickname || userInfo.username || '用户' }}</h3>
-              <p class="user-role" v-for="(role, index) in userInfo.roles" :key="index">
-                <el-tag size="small">{{ role.name }}</el-tag>
-              </p>
+              <div class="role-group">
+                <el-tag v-for="(role, index) in userInfo.roles" :key="index" size="small">{{ role.name }}</el-tag>
+              </div>
+              <div class="meta-row">
+                <div class="meta-item">
+                  <span class="meta-label">邮箱</span>
+                  <span class="meta-value">{{ userInfo.email || '-' }}</span>
+                </div>
+                <div v-if="userInfo.phone" class="meta-item">
+                  <span class="meta-label">手机号</span>
+                  <span class="meta-value">{{ userInfo.phone }}</span>
+                </div>
+              </div>
             </div>
           </div>
           <div class="stats-row">
             <div class="stat-item">
-              <h4>{{ userInfo.email || '-' }}</h4>
-              <span>邮箱</span>
+              <h4>{{ userInfo.username || '-' }}</h4>
+              <span>账号</span>
             </div>
-            <div class="stat-item" v-if="userInfo.phone">
-              <h4>{{ userInfo.phone }}</h4>
-              <span>手机号</span>
+            <div class="stat-item">
+              <h4>{{ userInfo.gender || '-' }}</h4>
+              <span>性别</span>
             </div>
           </div>
         </el-card>
       </el-col>
 
       <el-col :xs="24" :sm="24" :lg="16">
-        <el-card class="form-card">
+        <el-card class="form-card section-card">
           <div slot="header" class="card-header">
             <span>基本信息</span>
           </div>
@@ -80,7 +90,7 @@
       </el-col>
 
       <el-col :xs="24" :sm="24" :lg="24" style="margin-top: 20px;">
-        <el-card class="password-card">
+        <el-card class="password-card section-card">
           <div slot="header" class="card-header">
             <span>修改密码</span>
           </div>
@@ -128,7 +138,7 @@
 </template>
 
 <script>
-import { updateProfile, changePassword } from '@/api/auth'
+import { updateProfile, changePassword, uploadAvatar } from '@/api/auth'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -146,6 +156,7 @@ export default {
     return {
       loading: false,
       passwordLoading: false,
+      avatarUploading: false,
       profileForm: {
         username: '',
         nickname: '',
@@ -286,13 +297,52 @@ export default {
     handleAvatarSelected(event) {
       const file = event.target.files && event.target.files[0]
       if (!file) return
-      this.$message({
-        message: '已选择头像文件（上传接口未接入）',
-        type: 'info',
-        duration: 2000
+      const isImage = file.type && file.type.startsWith('image/')
+      const isLt2M = file.size <= 2 * 1024 * 1024
+
+      if (!isImage) {
+        this.$message({
+          message: '请选择图片文件',
+          type: 'warning',
+          duration: 2000
+        })
+        event.target.value = ''
+        return
+      }
+
+      if (!isLt2M) {
+        this.$message({
+          message: '头像大小不能超过 2MB',
+          type: 'warning',
+          duration: 2000
+        })
+        event.target.value = ''
+        return
+      }
+
+      const formData = new FormData()
+      formData.append('file', file)
+      this.avatarUploading = true
+      uploadAvatar(formData).then(response => {
+        if (response && response.data && response.data.avatar) {
+          this.$store.commit('user/SET_AVATAR', response.data.avatar)
+          this.$message({
+            message: '头像更新成功',
+            type: 'success',
+            duration: 2000
+          })
+        }
+      }).catch(() => {
+        this.$message({
+          message: '头像上传失败',
+          type: 'error',
+          duration: 2000
+        })
+      }).finally(() => {
+        this.avatarUploading = false
+        // 重置 input，允许重复选择同一文件
+        event.target.value = ''
       })
-      // 重置 input，允许重复选择同一文件
-      event.target.value = ''
     }
   }
 }
@@ -300,35 +350,29 @@ export default {
 
 <style lang="scss" scoped>
 .profile-container {
-  padding: 20px;
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
-.page-header {
-  margin-bottom: 20px;
-  padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 10px;
-  color: #fff;
-}
-h2 {
-  margin: 0;
-  font-size: 24px;
-}
-p {
-  margin: 0;
-  opacity: 0.9;
-}
+
 .user-card {
-  margin-bottom: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  border: 1px solid var(--border-dark, var(--border-light));
+  overflow: hidden;
+  background: var(--card-bg);
 }
-.user-info {
-  text-align: center;
-  padding: 20px 0;
+
+.profile-hero {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  padding: 20px 20px 16px 20px;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border-dark, var(--border-light));
 }
+
 .avatar-section {
   position: relative;
-  margin-bottom: 20px;
 }
 .avatar-click {
   position: relative;
@@ -353,47 +397,106 @@ p {
 .avatar-click:hover .avatar-mask {
   opacity: 1;
 }
+.avatar-click.uploading .avatar-mask {
+  opacity: 1;
+}
+.avatar-click.uploading {
+  cursor: progress;
+}
 .avatar-input {
   display: none;
 }
 .info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
   h3 {
-    margin: 10px 0;
+    margin: 0;
     font-size: 20px;
-    color: #333;
-  }
-  .user-role {
-    margin: 5px;
-    display: inline-block;
+    color: var(--app-text);
   }
 }
-.stats-row {
+.role-group {
   display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.meta-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--text-muted, #6b7280);
+  font-size: 13px;
+}
+
+.meta-item {
+  display: flex;
+  gap: 10px;
+}
+
+.meta-label {
+  min-width: 44px;
+  color: var(--text-muted, #6b7280);
+}
+
+.meta-value {
+  color: var(--app-text);
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 16px 20px 20px 20px;
+  background: var(--header-bg);
+  border-top: 1px solid var(--border-dark, var(--border-light));
 }
 .stat-item {
-  text-align: center;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-dark, var(--border-light));
   h4 {
     margin: 0;
-    font-size: 16px;
-    color: #333;
+    font-size: 15px;
+    color: var(--app-text);
   }
   span {
     font-size: 12px;
-    color: #999;
+    color: var(--text-muted, #6b7280);
   }
 }
-.form-card, .password-card {
-  margin-bottom: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+
+.section-card {
+  border-radius: 16px;
+  border: 1px solid var(--border-dark, var(--border-light));
 }
+
 .card-header {
   font-size: 16px;
-  font-weight: bold;
-  color: #333;
+  font-weight: 600;
+  color: var(--app-text);
 }
+
+::v-deep .el-form-item__label {
+  color: var(--text-muted, #6b7280);
+}
+
+::v-deep .el-card__header {
+  border-bottom: 1px solid var(--border-dark, var(--border-light));
+}
+
+@media (max-width: 768px) {
+  .profile-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stats-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 </style>

@@ -10,6 +10,10 @@ import logging
 import secrets
 from django.utils import timezone
 from django.conf import settings
+from django.core.files.storage import default_storage
+from django.utils.text import get_valid_filename
+from uuid import uuid4
+import os
 
 from .serializers import (
     LoginSerializer, RegisterSerializer,
@@ -261,6 +265,39 @@ def update_profile_view(request):
     except Exception as e:
         logger.error(f"Update profile error: {e}")
         return error_response('更新失败', code=500, http_status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def upload_avatar_view(request):
+    """上传用户头像"""
+    try:
+        file = request.FILES.get('file')
+        if not file:
+            return error_response('未找到头像文件', code=400, http_status=status.HTTP_400_BAD_REQUEST)
+
+        # 基础校验
+        if file.size > 2 * 1024 * 1024:
+            return error_response('头像大小不能超过 2MB', code=400, http_status=status.HTTP_400_BAD_REQUEST)
+
+        ext = os.path.splitext(file.name)[1].lower()
+        allowed_ext = {'.jpg', '.jpeg', '.png', '.gif', '.webp'}
+        if ext not in allowed_ext:
+            return error_response('仅支持 jpg/jpeg/png/gif/webp 格式', code=400, http_status=status.HTTP_400_BAD_REQUEST)
+
+        filename = get_valid_filename(file.name)
+        unique_name = f"{uuid4().hex}{ext}"
+        save_path = os.path.join('avatars', str(request.user.id), unique_name)
+        stored_path = default_storage.save(save_path, file)
+
+        avatar_url = request.build_absolute_uri(f"{settings.MEDIA_URL}{stored_path}")
+        request.user.avatar = avatar_url
+        request.user.save(update_fields=['avatar'])
+
+        return success_response({'avatar': avatar_url}, message='头像上传成功', code=200, http_status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.error(f"Upload avatar error: {e}")
+        return error_response('头像上传失败', code=500, http_status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['POST'])

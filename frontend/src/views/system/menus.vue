@@ -1,93 +1,120 @@
 <template>
   <div class="menu-container">
     <div class="page-header">
-      <h2>菜单管理</h2>
-      <el-button type="primary" icon="el-icon-plus" @click="handleAdd">添加菜单</el-button>
+      <div class="header-left">
+        <h2>菜单管理</h2>
+        <p>只读模式：菜单/权限由配置文件维护</p>
+      </div>
+      <div class="header-actions">
+        <el-button icon="el-icon-refresh" @click="fetchMenuList" size="mini">刷新</el-button>
+      </div>
     </div>
 
-    <el-row :gutter="20">
-      <el-col :span="8">
-        <el-card class="tree-card">
-          <div slot="header" class="card-header">
-            <span>菜单树</span>
-            <el-button icon="el-icon-refresh" @click="fetchMenuList" size="small">刷新</el-button>
-          </div>
-          <el-tree
-            ref="menuTree"
-            :data="menuTree"
-            node-key="id"
-            :props="{children: 'children', label: 'name'}"
-            :expand-on-click-node="false"
-            highlight-current
-            @node-click="handleNodeClick"
-          >
-            <span class="custom-tree-node" slot-scope="{ data }">
-              <i v-if="data.icon" :class="data.icon"></i>
-              <span>{{ data.name || data.title }}</span>
-            </span>
-          </el-tree>
-        </el-card>
-      </el-col>
+    <div class="panel-grid">
+      <el-card class="tree-card">
+        <div class="card-title" slot="header">
+          <span>菜单树</span>
+          <span class="card-sub">{{ menuList.length }} 个</span>
+        </div>
+        <el-tree
+          ref="menuTree"
+          :data="menuTree"
+          node-key="id"
+          :props="{children: 'children', label: 'name'}"
+          :expand-on-click-node="false"
+          highlight-current
+          @node-click="handleNodeClick"
+        >
+          <span class="custom-tree-node" slot-scope="{ data }">
+            <i v-if="data.icon" :class="data.icon"></i>
+            <span class="node-title">{{ data.name || data.title }}</span>
+            <el-tag v-if="data.type" size="mini" class="node-tag">{{ data.type }}</el-tag>
+          </span>
+        </el-tree>
+      </el-card>
 
-      <el-col :span="16">
-        <el-card class="form-card">
-          <div slot="header">
-            <span>{{ dialogTitle }}</span>
+      <el-card class="detail-card">
+        <div slot="header" class="card-title">
+          <span>菜单详情</span>
+        </div>
+        <div v-if="!selectedMenu || !selectedMenu.id" class="empty-state">
+          <div class="empty-icon">⌘</div>
+          <div class="empty-title">请选择左侧菜单</div>
+          <div class="empty-desc">点击树节点查看详细配置</div>
+        </div>
+        <div v-else class="detail-grid">
+          <div class="detail-hero">
+            <div class="hero-icon">
+              <i v-if="selectedMenu.icon" :class="selectedMenu.icon"></i>
+              <span v-else>◎</span>
+            </div>
+            <div class="hero-info">
+              <div class="hero-title">{{ selectedMenu.name || selectedMenu.title || '-' }}</div>
+              <div class="hero-sub">{{ selectedMenu.code || '-' }}</div>
+              <div class="hero-tags">
+                <el-tag size="mini" type="info">{{ selectedMenu.type || '-' }}</el-tag>
+                <el-tag size="mini" :type="selectedMenu.is_visible ? 'success' : 'danger'">
+                  {{ selectedMenu.is_visible ? '显示' : '隐藏' }}
+                </el-tag>
+              </div>
+            </div>
+            <div class="hero-order">
+              <div class="hero-order-label">排序</div>
+              <div class="hero-order-value">{{ selectedMenu.sort_order ?? '-' }}</div>
+            </div>
           </div>
-          <el-form ref="menuFormRef" :model="menuForm" :rules="menuRules" label-width="100px">
-            <el-form-item label="菜单名称" prop="name">
-              <el-input v-model="menuForm.name" placeholder="请输入菜单名称" />
-            </el-form-item>
-            <el-form-item label="权限代码" prop="code">
-              <el-input v-model="menuForm.code" placeholder="请输入权限代码，如：system:user" />
-            </el-form-item>
-            <el-form-item label="菜单类型" prop="type">
-              <el-radio-group v-model="menuForm.type">
-                <el-radio label="menu">菜单</el-radio>
-                <el-radio label="button">按钮</el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item label="路由路径" prop="path">
-              <el-input v-model="menuForm.path" placeholder="请输入路由路径，如：/system/users" />
-            </el-form-item>
-            <el-form-item label="组件路径" prop="component">
-              <el-input v-model="menuForm.component" placeholder="请输入组件路径，如：system/users/index" />
-            </el-form-item>
-            <el-form-item label="菜单图标" prop="icon">
-              <el-input v-model="menuForm.icon" placeholder="请输入图标类名，如：el-icon-user" />
-            </el-form-item>
-            <el-form-item label="排序顺序" prop="sort_order">
-              <el-input-number v-model="menuForm.sort_order" :min="0" placeholder="请输入排序顺序，数字越小越靠前" />
-            </el-form-item>
-            <el-form-item label="是否显示" prop="is_visible">
-              <el-switch v-model="menuForm.is_visible" active-text="显示" inactive-text="隐藏" />
-            </el-form-item>
-            <el-form-item label="重定向" prop="redirect">
-              <el-input v-model="menuForm.redirect" placeholder="请输入重定向路径，留空则不重定向" />
-            </el-form-item>
-            <el-form-item label="父级菜单" prop="parent_id" v-if="isEdit">
-              <el-select v-model="menuForm.parent_id" placeholder="请选择父级菜单（留空为顶级菜单）" clearable>
-                <el-option
-                  v-for="item in parentMenuOptions"
-                  :key="item.id"
-                  :label="item.name || item.title"
-                  :value="item.id"
-                />
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" :loading="loading" @click="handleSubmit">{{ isEdit ? '更新' : '创建' }}</el-button>
-              <el-button @click="handleCancel">取消</el-button>
-            </el-form-item>
-          </el-form>
-        </el-card>
-      </el-col>
-    </el-row>
+
+          <div class="detail-section">
+            <div class="section-title">路由信息</div>
+            <div class="key-grid">
+              <div class="key-item">
+                <div class="key-label">路径</div>
+                <div class="key-value">{{ selectedMenu.path || '-' }}</div>
+              </div>
+              <div class="key-item">
+                <div class="key-label">组件</div>
+                <div class="key-value">{{ selectedMenu.component || '-' }}</div>
+              </div>
+              <div class="key-item">
+                <div class="key-label">重定向</div>
+                <div class="key-value">{{ selectedMenu.redirect || '-' }}</div>
+              </div>
+              <div class="key-item">
+                <div class="key-label">父级</div>
+                <div class="key-value">{{ selectedMenu.parent_id || '-' }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <div class="section-title">状态概览</div>
+            <div class="stat-grid">
+              <div class="stat-card">
+                <div class="stat-label">菜单类型</div>
+                <div class="stat-value">{{ selectedMenu.type || '-' }}</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">是否显示</div>
+                <div class="stat-value">{{ selectedMenu.is_visible ? '显示' : '隐藏' }}</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">排序号</div>
+                <div class="stat-value">{{ selectedMenu.sort_order ?? '-' }}</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">图标</div>
+                <div class="stat-value">{{ selectedMenu.icon || '-' }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </el-card>
+    </div>
   </div>
 </template>
 
 <script>
-import { getMenus, createMenu, updateMenu, deleteMenu } from '@/api/menu'
+import { getMenus } from '@/api/menu'
 
 export default {
   name: 'MenuManagement',
@@ -95,28 +122,7 @@ export default {
     return {
       menuList: [],
       menuTree: [],
-      dialogVisible: false,
-      dialogTitle: '',
-      isEdit: false,
-      loading: false,
-      parentMenuOptions: [],
-      menuForm: {
-        id: null,
-        name: '',
-        code: '',
-        type: 'menu',
-        path: '',
-        component: '',
-        icon: '',
-        sort_order: 0,
-        is_visible: true,
-        redirect: '',
-        parent_id: null
-      },
-      menuRules: {
-        name: [{ required: true, message: '请输入菜单名称', trigger: 'blur' }],
-        code: [{ required: true, message: '请输入权限代码', trigger: 'blur' }]
-      }
+      selectedMenu: {}
     }
   },
   created() {
@@ -151,115 +157,8 @@ export default {
 
       this.menuTree = tree
     },
-    handleNodeClick(data, node) {
-      this.isEdit = true
-      this.dialogTitle = '编辑菜单'
-      this.dialogVisible = true
-      this.menuForm = {
-        id: data.id,
-        name: data.name || data.title,
-        code: data.code,
-        type: data.type,
-        path: data.path,
-        component: data.component,
-        icon: data.icon,
-        sort_order: data.sort_order || 0,
-        is_visible: data.is_visible,
-        redirect: data.redirect,
-        parent_id: data.parent_id
-      }
-      this.buildParentOptions(data.id)
-    },
-    handleAdd() {
-      this.isEdit = false
-      this.dialogTitle = '添加菜单'
-      this.dialogVisible = true
-      this.resetForm()
-    },
-    handleEdit(data) {
-      this.isEdit = true
-      this.dialogTitle = '编辑菜单'
-      this.dialogVisible = true
-      this.menuForm = {
-        id: data.id,
-        name: data.name || data.title,
-        code: data.code,
-        type: data.type,
-        path: data.path,
-        component: data.component,
-        icon: data.icon,
-        sort_order: data.sort_order || 0,
-        is_visible: data.is_visible,
-        redirect: data.redirect,
-        parent_id: data.parent_id
-      }
-      this.buildParentOptions(data.id)
-    },
-    buildParentOptions(excludeId = null) {
-      this.parentMenuOptions = this.menuList
-        .filter(m => m.id !== excludeId)
-        .map(m => ({ id: m.id, name: m.name || m.title }))
-    },
-    handleDelete(row) {
-      this.$confirm(`确定要删除菜单"${row.name || row.title}"吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(async () => {
-        try {
-          await deleteMenu(row.id)
-          this.$message.success('删除成功')
-          this.fetchMenuList()
-        } catch (error) {
-          this.$message.error('删除失败')
-        }
-      }).catch(() => {})
-    },
-    handleCancel() {
-      this.dialogVisible = false
-      this.resetForm()
-    },
-    async handleSubmit() {
-      this.$refs.menuFormRef.validate(async valid => {
-        if (valid) {
-          this.loading = true
-          try {
-            const data = { ...this.menuForm }
-            if (this.isEdit) {
-              await updateMenu(data.id, data)
-              this.$message.success('更新成功')
-            } else {
-              await createMenu(data)
-              this.$message.success('创建成功')
-            }
-            this.dialogVisible = false
-            this.resetForm()
-            this.fetchMenuList()
-          } catch (error) {
-            this.$message.error(error.message || '操作失败')
-          } finally {
-            this.loading = false
-          }
-        }
-      })
-    },
-    resetForm() {
-      this.menuForm = {
-        id: null,
-        name: '',
-        code: '',
-        type: 'menu',
-        path: '',
-        component: '',
-        icon: '',
-        sort_order: 0,
-        is_visible: true,
-        redirect: '',
-        parent_id: null
-      }
-      if (this.$refs.menuFormRef) {
-        this.$refs.menuFormRef.clearValidate()
-      }
+    handleNodeClick(data) {
+      this.selectedMenu = { ...data }
     }
   }
 }
@@ -267,7 +166,10 @@ export default {
 
 <style lang="scss" scoped>
 .menu-container {
-  padding: 20px;
+  padding: 20px 24px;
+  background:
+    radial-gradient(1200px 400px at 10% -10%, rgba(125, 143, 255, 0.18), transparent 50%),
+    radial-gradient(900px 300px at 90% -10%, rgba(0, 201, 255, 0.18), transparent 50%);
 }
 
 .page-header {
@@ -275,46 +177,269 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 10px;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, #1f2a44 0%, #2d3a66 100%);
+  border-radius: 14px;
   color: #fff;
+  box-shadow: 0 12px 30px rgba(31, 42, 68, 0.2);
 
   h2 {
     margin: 0;
-    font-size: 24px;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+  }
+
+  p {
+    margin: 6px 0 0 0;
+    opacity: 0.8;
+    font-size: 13px;
   }
 }
 
-.tree-card {
-  height: calc(100vh - 200px);
-  overflow-y: auto;
+.header-left {
+  display: flex;
+  flex-direction: column;
 }
 
-.card-header {
+.header-actions {
   display: flex;
-  justify-content: space-between;
+  gap: 8px;
   align-items: center;
+}
+
+.panel-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 18px;
+}
+
+.tree-card {
+  height: calc(100vh - 220px);
+  overflow-y: auto;
+  border-radius: 14px;
+}
+
+.detail-card {
+  height: calc(100vh - 220px);
+  border-radius: 14px;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 600;
+}
+
+.card-sub {
+  font-size: 12px;
+  color: var(--menu-card-sub);
 }
 
 .custom-tree-node {
   flex: 1;
   align-items: center;
   padding: 8px 0;
+  display: flex;
+  gap: 8px;
 
   i {
-    margin-right: 8px;
     font-size: 16px;
+    color: var(--menu-tree-icon);
   }
 
-  span {
+  .node-title {
     font-size: 14px;
+    color: var(--menu-node-title);
   }
 }
 
-.form-card {
-  height: calc(100vh - 200px);
+.node-tag {
+  margin-left: auto;
+  background: var(--menu-node-tag-bg);
+  color: var(--menu-node-tag-text);
+  border: 1px solid var(--menu-node-tag-border);
+}
+
+.empty-state {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--menu-empty-text);
+  text-align: center;
+  gap: 6px;
+}
+
+.empty-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--menu-empty-icon-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--menu-empty-icon-text);
+  font-weight: 700;
+}
+
+.empty-title {
+  font-size: 14px;
+  color: var(--menu-empty-title);
+}
+
+.empty-desc {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.detail-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detail-hero {
+  display: grid;
+  grid-template-columns: 56px 1fr 120px;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--menu-hero-bg);
+  border: 1px solid var(--menu-hero-border);
+  align-items: center;
+}
+
+.hero-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--menu-hero-icon-bg);
+  color: var(--menu-hero-icon-text);
+  font-size: 22px;
+}
+
+.hero-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hero-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--menu-hero-title);
+}
+
+.hero-sub {
+  font-size: 12px;
+  color: var(--menu-hero-sub);
+}
+
+.hero-tags {
+  display: flex;
+  gap: 6px;
+}
+
+.hero-order {
+  text-align: right;
+}
+
+.hero-order-label {
+  font-size: 12px;
+  color: var(--menu-hero-order-label);
+}
+
+.hero-order-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--menu-hero-order-value);
+}
+
+.detail-section {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--menu-section-bg);
+  border: 1px solid var(--menu-section-border);
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--menu-section-title);
+  margin-bottom: 10px;
+}
+
+.key-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.key-item {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--menu-key-bg);
+  border: 1px solid var(--menu-key-border);
+}
+
+.key-label {
+  font-size: 12px;
+  color: var(--menu-key-label);
+  margin-bottom: 6px;
+}
+
+.key-value {
+  font-size: 13px;
+  color: var(--menu-key-value);
+  word-break: break-all;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.stat-card {
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--menu-stat-bg);
+  border: 1px solid var(--menu-stat-border);
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--menu-stat-label);
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--menu-stat-value);
+}
+
+@media (max-width: 1200px) {
+  .panel-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+::v-deep .el-tree-node__content {
+  color: var(--menu-tree-text);
+}
+
+::v-deep .el-tree-node__content:hover {
+  background-color: var(--menu-tree-hover);
+}
+
+::v-deep .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+  background-color: var(--menu-tree-current);
 }
 </style>

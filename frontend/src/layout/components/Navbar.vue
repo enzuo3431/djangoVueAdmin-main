@@ -27,11 +27,11 @@
           <span class="user-name">{{ name || '管理员' }}</span>
           <i class="el-icon-caret-bottom" />
         </div>
-        <el-dropdown-menu slot="dropdown">
+        <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/profile">
             <el-dropdown-item>个人中心</el-dropdown-item>
           </router-link>
-          <el-dropdown-item divided command="logout">
+          <el-dropdown-item divided command="logout" class="logout-item">
             退出登录
           </el-dropdown-item>
         </el-dropdown-menu>
