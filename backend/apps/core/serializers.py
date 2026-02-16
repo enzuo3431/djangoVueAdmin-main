@@ -236,3 +236,4 @@ class DataPermissionRuleSerializer(serializers.ModelSerializer):
         model = DataPermissionRule
         fields = ['id', 'role', 'role_name', 'field', 'operator', 'value', 'created_at']
         read_only_fields = ['id', 'created_at', 'role_name']
+

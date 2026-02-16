@@ -334,3 +334,4 @@ class DataPermissionRule(BaseModel):
 
     def __str__(self):
         return f"{self.role_id}:{self.field} {self.operator}"
+

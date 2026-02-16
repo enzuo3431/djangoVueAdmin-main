@@ -57,4 +57,5 @@ urlpatterns = [
     path('data-rules/create/', views.data_permission_rule_create_view, name='data_rule_create'),
     path('data-rules/<int:rule_id>/update/', views.data_permission_rule_update_view, name='data_rule_update'),
     path('data-rules/<int:rule_id>/delete/', views.data_permission_rule_delete_view, name='data_rule_delete'),
+
 ]

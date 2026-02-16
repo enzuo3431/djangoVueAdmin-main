@@ -1,8 +1,13 @@
 <template>
   <div class="app-container">
     <div class="page-header">
-      <h2>数据权限规则</h2>
-      <p>基于角色配置自定义过滤条件（大众化标准格式）</p>
+      <div class="header-left">
+        <h2>数据权限规则</h2>
+        <p>基于角色配置自定义过滤条件（大众化标准格式）</p>
+      </div>
+      <div class="header-actions">
+        <el-button icon="el-icon-refresh" @click="getList" size="mini">刷新</el-button>
+      </div>
     </div>
 
     <el-card class="box-card">
@@ -244,22 +249,46 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.app-container {
+  padding: 20px 24px;
+  background:
+    radial-gradient(1200px 400px at 10% -10%, rgba(125, 143, 255, 0.18), transparent 50%),
+    radial-gradient(900px 300px at 90% -10%, rgba(0, 201, 255, 0.18), transparent 50%);
+}
+
 .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
-  padding: 20px;
-  background: linear-gradient(135deg, #5b86e5 0%, #36d1dc 100%);
-  border-radius: 10px;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, #1f2a44 0%, #2d3a66 100%);
+  border-radius: 14px;
   color: #fff;
+  box-shadow: 0 12px 30px rgba(31, 42, 68, 0.2);
 
   h2 {
-    margin: 0 0 10px 0;
-    font-size: 24px;
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: 0.5px;
   }
 
   p {
-    margin: 0;
-    opacity: 0.9;
+    margin: 6px 0 0 0;
+    opacity: 0.8;
+    font-size: 13px;
   }
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .filter-container {

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'apps.mock_api.apps.ApiConfig',
     'apps.core.apps.CoreConfig',
     'apps.authentication.apps.AuthenticationConfig',
+    'apps.script.apps.ScriptConfig',
 ]
 
 MIDDLEWARE = [

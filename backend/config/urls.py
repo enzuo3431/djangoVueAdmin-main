@@ -14,6 +14,7 @@ urlpatterns = [
     path('api/', include('apps.mock_api.urls')),
     path('api/auth/', include('apps.authentication.urls')),
     path('api/', include('apps.core.urls')),
+    path('api/', include('apps.script.urls')),
 ]
 
 # 开发环境下提供静态文件服务

@@ -30,10 +30,24 @@ export function menusToRoutes(menus, parentPath = '') {
     if (menu.component === 'Layout') {
       route.component = parentPath ? EmptyLayout : Layout
     } else if (menu.component) {
-      if (componentMap[menu.component]) {
-        route.component = componentMap[menu.component]
+      const viewComponent = componentMap[menu.component]
+        ? componentMap[menu.component]
+        : () => import(`@/views/${menu.component}.vue`)
+
+      // 顶层叶子路由需要包一层 Layout，保证侧边栏与导航栏显示
+      if (!parentPath && (!menu.children || menu.children.length === 0)) {
+        route.component = Layout
+        route.name = `${menu.code || routePath}-layout`
+        route.children = [
+          {
+            path: '',
+            name: menu.code,
+            component: viewComponent,
+            meta: { title: menu.title, icon: menu.icon || '' }
+          }
+        ]
       } else {
-        route.component = () => import(`@/views/${menu.component}.vue`)
+        route.component = viewComponent
       }
     } else {
       route.component = parentPath ? EmptyLayout : Layout

@@ -1,0 +1,7 @@
+from django.apps import AppConfig
+
+
+class ScriptConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'apps.script'
+    verbose_name = '脚本管理'

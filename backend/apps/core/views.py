@@ -892,3 +892,4 @@ def data_permission_rule_delete_view(request, rule_id):
     rule.is_deleted = True
     rule.save()
     return success_response(message='删除成功')
+
