@@ -37,3 +37,43 @@ export function deleteScriptConfig(id) {
     method: 'delete'
   })
 }
+
+export function getScriptQueues() {
+  return request({
+    url: '/script/queues/',
+    method: 'get'
+  })
+}
+
+export function createScriptQueue(data) {
+  return request({
+    url: '/script/queues/create/',
+    method: 'post',
+    data
+  })
+}
+
+export function clearScriptQueue(id) {
+  return request({
+    url: `/script/queues/${id}/clear/`,
+    method: 'post'
+  })
+}
+
+export function deleteScriptQueue(id) {
+  return request({
+    url: `/script/queues/${id}/delete/`,
+    method: 'delete'
+  })
+}
+
+export function uploadScriptQueue(id, data) {
+  return request({
+    url: `/script/queues/${id}/upload/`,
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}

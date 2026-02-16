@@ -230,3 +230,6 @@ CACHES = {
 
 # 多端登录控制（最大会话数，0 表示不限制）
 AUTH_MAX_SESSIONS = int(os.getenv('AUTH_MAX_SESSIONS', '1'))
+
+# Redis
+REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/0')

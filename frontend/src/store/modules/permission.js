@@ -11,8 +11,11 @@ const componentMap = {
   'system/menus/index': () => import('@/views/system/menus'),
   'system/departments/index': () => import('@/views/system/departments'),
   'system/logs/login': () => import('@/views/system/logs/login'),
+  'system/logs/login/index': () => import('@/views/system/logs/login'),
   'system/logs/operation': () => import('@/views/system/logs/operation'),
-  'system/data-permissions/index': () => import('@/views/system/data-permissions')
+  'system/logs/operation/index': () => import('@/views/system/logs/operation'),
+  'system/data-permissions/index': () => import('@/views/system/data-permissions'),
+  'script/data/index': () => import('@/views/script/data/index')
 }
 
 export function menusToRoutes(menus, parentPath = '') {

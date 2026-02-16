@@ -310,10 +310,49 @@
       "sort_order": 320
     },
     {
+      "name": "脚本数据",
+      "code": "script:data",
+      "type": "menu",
+      "path": "/script/data",
+      "component": "script/data/index",
+      "parent_code": "system:script",
+      "sort_order": 330
+    },
+    {
       "name": "脚本配置列表",
       "code": "script:config:list",
       "type": "api",
       "path": "/api/script/configs/"
+    },
+    {
+      "name": "队列列表",
+      "code": "script:queue:list",
+      "type": "api",
+      "path": "/api/script/queues/"
+    },
+    {
+      "name": "创建队列",
+      "code": "script:queue:add",
+      "type": "api",
+      "path": "/api/script/queues/create/"
+    },
+    {
+      "name": "清空队列",
+      "code": "script:queue:clear",
+      "type": "api",
+      "path": "/api/script/queues/*/clear/"
+    },
+    {
+      "name": "删除队列",
+      "code": "script:queue:delete",
+      "type": "api",
+      "path": "/api/script/queues/*/delete/"
+    },
+    {
+      "name": "上传队列数据",
+      "code": "script:queue:upload",
+      "type": "api",
+      "path": "/api/script/queues/*/upload/"
     },
     {
       "name": "添加脚本配置",
@@ -413,10 +452,16 @@
         "system:script",
         "script:santiao",
         "script:zhifubao",
+        "script:data",
         "script:config:list",
         "script:config:add",
         "script:config:edit",
-        "script:config:delete"
+        "script:config:delete",
+        "script:queue:list",
+        "script:queue:add",
+        "script:queue:clear",
+        "script:queue:delete",
+        "script:queue:upload"
       ]
     },
     {
@@ -446,7 +491,10 @@
         "system:script",
         "script:santiao",
         "script:zhifubao",
-        "script:config:list"
+        "script:data",
+        "script:config:list",
+        "script:queue:list",
+        "script:queue:upload"
       ]
     },
     {
@@ -471,7 +519,9 @@
         "system:script",
         "script:santiao",
         "script:zhifubao",
-        "script:config:list"
+        "script:data",
+        "script:config:list",
+        "script:queue:list"
       ]
     },
     {
@@ -496,7 +546,9 @@
         "system:script",
         "script:santiao",
         "script:zhifubao",
-        "script:config:list"
+        "script:data",
+        "script:config:list",
+        "script:queue:list"
       ]
     }
   ],

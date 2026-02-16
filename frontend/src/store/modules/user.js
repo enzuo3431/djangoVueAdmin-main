@@ -3,6 +3,7 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const state = {
   token: getToken(),
+  userId: null,
   name: '',
   avatar: '',
   nickname: '',
@@ -17,6 +18,9 @@ const state = {
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
+  },
+  SET_USER_ID: (state, userId) => {
+    state.userId = userId
   },
   SET_NAME: (state, name) => {
     state.name = name
@@ -55,6 +59,7 @@ const actions = {
       login({ username: username.trim(), password: password }).then(response => {
         const { data } = response
         commit('SET_TOKEN', data.token)
+        commit('SET_USER_ID', data.user.id)
         commit('SET_NAME', data.user.username)
         commit('SET_AVATAR', data.user.avatar || '')
         commit('SET_NICKNAME', data.user.nickname || '')
@@ -85,6 +90,7 @@ const actions = {
         const { user, permissions, menus } = data
 
         commit('SET_NAME', user.username)
+        commit('SET_USER_ID', user.id)
         commit('SET_AVATAR', user.avatar || '')
         commit('SET_NICKNAME', user.nickname || '')
         commit('SET_EMAIL', user.email || '')
@@ -106,6 +112,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       logout().then(() => {
         commit('SET_TOKEN', '')
+        commit('SET_USER_ID', null)
         commit('SET_NAME', '')
         commit('SET_AVATAR', '')
         commit('SET_NICKNAME', '')
@@ -127,6 +134,7 @@ const actions = {
   resetToken({ commit }) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
+      commit('SET_USER_ID', null)
       commit('SET_NAME', '')
       commit('SET_AVATAR', '')
       commit('SET_NICKNAME', '')

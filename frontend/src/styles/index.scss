@@ -26,6 +26,100 @@ html {
   height: 100%;
 }
 
+body.theme-dark,
+body.theme-dark html,
+body.theme-dark #app,
+body.theme-dark .app-main {
+  background-color: var(--app-bg);
+}
+
+body.theme-dark .santiao-page .section-title {
+  color: #d1a84f !important;
+}
+
+body.theme-dark .script-data-page .name-text {
+  color: #d1a84f !important;
+}
+
+body.theme-dark .script-data-page .script-data-card {
+  background-color: #1b1f24 !important;
+  border-color: #2a2f35 !important;
+}
+
+body.theme-dark .script-data-page .script-data-table ::v-deep .el-table__header th {
+  background: #1a1f24 !important;
+  color: #d1a84f !important;
+  border-bottom: 1px solid #2a2f35 !important;
+}
+
+body.theme-dark .script-data-page .script-data-table ::v-deep .el-table__header-wrapper,
+body.theme-dark .script-data-page .script-data-table ::v-deep .el-table__header,
+body.theme-dark .script-data-page .script-data-table ::v-deep .el-table__header thead,
+body.theme-dark .script-data-page .script-data-table ::v-deep .el-table__header tr {
+  background: #1a1f24 !important;
+}
+
+body.theme-dark .script-data-page .script-data-table ::v-deep .el-table th,
+body.theme-dark .script-data-page .script-data-table ::v-deep .el-table__header-wrapper th,
+body.theme-dark .script-data-page .script-data-table ::v-deep .el-table__fixed-header-wrapper th {
+  background: #1a1f24 !important;
+  color: #d1a84f !important;
+}
+
+body.theme-dark .script-data-page .script-data-table ::v-deep .el-table__header-wrapper th,
+body.theme-dark .script-data-page .script-data-table ::v-deep .el-table__header-wrapper th > .cell {
+  background: #1a1f24 !important;
+  color: #d1a84f !important;
+}
+
+body.theme-dark .script-data-page .script-data-table ::v-deep .el-table td,
+body.theme-dark .script-data-page .script-data-table ::v-deep .el-table th.is-leaf {
+  border-color: #2a2f35 !important;
+}
+
+body.theme-dark .script-data-page .script-data-table ::v-deep .el-table--border::after,
+body.theme-dark .script-data-page .script-data-table ::v-deep .el-table--border::before,
+body.theme-dark .script-data-page .script-data-table ::v-deep .el-table__fixed::before {
+  background-color: #2a2f35 !important;
+}
+
+body.theme-dark .script-data-page .script-data-table ::v-deep .el-table__row {
+  background-color: #1d2227 !important;
+}
+
+body.theme-dark .script-data-page .script-data-table ::v-deep .el-table__row:hover > td {
+  background: #1f252b !important;
+}
+
+body.theme-dark .script-data-page .script-data-table ::v-deep .el-table td {
+  color: #c7ced6 !important;
+}
+
+body.theme-dark .script-data-page .name-text {
+  color: #f1d28a !important;
+}
+
+body.theme-dark .script-data-page .remark-text {
+  color: #a9b0b7 !important;
+}
+
+body.theme-dark .script-data-page .count-pill {
+  background: #2a2416 !important;
+  color: #f1d28a !important;
+  border: 1px solid #3a3320 !important;
+}
+
+body.theme-dark .script-data-page .page-header {
+  background: linear-gradient(135deg, #2a2f35 0%, #1f2328 100%) !important;
+}
+
+body.theme-dark .script-data-page .create-row ::v-deep .el-input__inner {
+  background: #1a1f24 !important;
+  border-color: #2a2f35 !important;
+  color: #e1e6ec !important;
+}
+
+
 
 :root {
   --app-bg: #f0f2f5;
