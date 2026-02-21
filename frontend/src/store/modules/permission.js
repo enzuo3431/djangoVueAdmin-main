@@ -15,7 +15,12 @@ const componentMap = {
   'system/logs/operation': () => import('@/views/system/logs/operation'),
   'system/logs/operation/index': () => import('@/views/system/logs/operation'),
   'system/data-permissions/index': () => import('@/views/system/data-permissions'),
-  'script/data/index': () => import('@/views/script/data/index')
+  'script/data/index': () => import('@/views/script/data/index'),
+  'data/archive/index': () => import('@/views/data-management/archive/index'),
+  'tools/benefits/index': () => import('@/views/tools/benefits/index'),
+  'tools/liushan/index': () => import('@/views/tools/liushan/index'),
+  'tools/nickname/index': () => import('@/views/tools/nickname/index'),
+  'tools/file-split/index': () => import('@/views/tools/file-split/index')
 }
 
 export function menusToRoutes(menus, parentPath = '') {

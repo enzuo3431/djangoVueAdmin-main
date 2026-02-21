@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container system-roles-page">
     <div class="page-header">
       <div class="header-left">
         <h2>角色管理</h2>

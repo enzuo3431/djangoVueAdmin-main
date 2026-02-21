@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container santiao-page">
+  <div class="app-container santiao-page script-santiao-page">
     <div class="page-header">
       <h2>三条配置</h2>
       <p>脚本相关的三条配置管理页面</p>
@@ -448,32 +448,32 @@ export default {
   border-color: #e4e7ed;
 }
 
-:global(body.theme-dark) ::v-deep .el-form-item__label {
+:global(body.theme-dark:not([data-theme='black-gold'])) ::v-deep .el-form-item__label {
   color: rgba(255, 255, 255, 0.6);
 }
 
 
-:global(body.theme-dark) .section-title::before {
+:global(body.theme-dark:not([data-theme='black-gold'])) .section-title::before {
   background: linear-gradient(180deg, #9db0ff 0%, #6b8dff 100%);
 }
 
-:global(body.theme-dark) ::v-deep .el-input__inner,
-:global(body.theme-dark) ::v-deep .el-textarea__inner,
-:global(body.theme-dark) ::v-deep .el-input-number__inner {
+:global(body.theme-dark:not([data-theme='black-gold'])) ::v-deep .el-input__inner,
+:global(body.theme-dark:not([data-theme='black-gold'])) ::v-deep .el-textarea__inner,
+:global(body.theme-dark:not([data-theme='black-gold'])) ::v-deep .el-input-number__inner {
   background: rgba(23, 28, 44, 0.9);
   border-color: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.9);
 }
 
-:global(body.theme-dark) ::v-deep .el-input__inner:focus,
-:global(body.theme-dark) ::v-deep .el-textarea__inner:focus,
-:global(body.theme-dark) ::v-deep .el-input-number__inner:focus {
+:global(body.theme-dark:not([data-theme='black-gold'])) ::v-deep .el-input__inner:focus,
+:global(body.theme-dark:not([data-theme='black-gold'])) ::v-deep .el-textarea__inner:focus,
+:global(body.theme-dark:not([data-theme='black-gold'])) ::v-deep .el-input-number__inner:focus {
   border-color: rgba(79, 99, 255, 0.8);
   box-shadow: 0 0 0 3px rgba(79, 99, 255, 0.25);
 }
 
-:global(body.theme-dark) ::v-deep .el-input-number__decrease,
-:global(body.theme-dark) ::v-deep .el-input-number__increase {
+:global(body.theme-dark:not([data-theme='black-gold'])) ::v-deep .el-input-number__decrease,
+:global(body.theme-dark:not([data-theme='black-gold'])) ::v-deep .el-input-number__increase {
   border-color: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.7);
 }
@@ -568,20 +568,20 @@ export default {
   gap: 8px;
 }
 
-:global(body.theme-dark) .user-id-badge {
+:global(body.theme-dark:not([data-theme='black-gold'])) .user-id-badge {
   background: rgba(79, 99, 255, 0.18);
   border-color: rgba(79, 99, 255, 0.35);
 }
 
-:global(body.theme-dark) .user-id-badge::before {
+:global(body.theme-dark:not([data-theme='black-gold'])) .user-id-badge::before {
   background: #26d17a;
 }
 
-:global(body.theme-dark) .badge-value {
+:global(body.theme-dark:not([data-theme='black-gold'])) .badge-value {
   color: rgba(255, 255, 255, 0.9);
 }
 
-:global(body.theme-dark) .badge-prefix {
+:global(body.theme-dark:not([data-theme='black-gold'])) .badge-prefix {
   color: #9db0ff;
 }
 </style>

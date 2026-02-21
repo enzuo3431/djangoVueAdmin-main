@@ -285,3 +285,4 @@ def script_queue_upload_view(request, queue_id):
         'added': len(phones),
         'mode': mode
     }, message='上传成功')
+

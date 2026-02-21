@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container system-operation-logs-page">
     <div class="page-header">
       <div class="header-left">
         <h2>操作日志</h2>

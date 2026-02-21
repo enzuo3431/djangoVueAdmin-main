@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container system-users-page">
     <div class="page-header">
       <div class="header-left">
         <h2>用户管理</h2>

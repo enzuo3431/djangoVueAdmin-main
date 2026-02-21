@@ -13,22 +13,31 @@ var requestAnimFrame = (function() {
 })()
 
 export function scrollTo(to, duration, callback) {
-  const move = (elapsed) => {
-    const now = elapsed
-    const start = window.scrollY
-    const change = to - start
-    const increment = 20
-    const duration = typeof duration === 'undefined' ? 500 : duration
+  const start = window.scrollY || window.pageYOffset || 0
+  const change = to - start
+  const totalDuration = typeof duration === 'undefined' ? 500 : duration
+  const startTime = performance.now()
 
-    document.documentElement.scrollTop = change
+  const move = (timestamp) => {
+    const elapsed = timestamp - startTime
+    const position = Math.easeInOutQuad(
+      Math.min(elapsed, totalDuration),
+      start,
+      change,
+      totalDuration
+    )
 
-    if (now < duration) {
+    document.documentElement.scrollTop = position
+    document.body.scrollTop = position
+
+    if (elapsed < totalDuration) {
       requestAnimFrame(move)
-    } else {
-      if (callback && typeof callback === 'function') {
-        callback()
-      }
+      return
+    }
+    if (callback && typeof callback === 'function') {
+      callback()
     }
   }
+
   requestAnimFrame(move)
 }

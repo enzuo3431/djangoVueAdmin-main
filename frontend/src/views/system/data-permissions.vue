@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container system-data-permissions-page">
     <div class="page-header">
       <div class="header-left">
         <h2>数据权限规则</h2>

@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container system-departments-page">
     <div class="page-header">
       <div class="header-left">
         <h2>部门管理</h2>

@@ -16,7 +16,7 @@
         </el-select>
         <el-switch
           v-model="darkMode"
-          active-text="暗黑"
+          active-text="黑金"
           inactive-text="明亮"
           @change="toggleDark"
         />

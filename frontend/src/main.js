@@ -40,7 +40,9 @@ Vue.use(directive)
 Vue.filter('datetime', formatDateTime)
 
 // 初始化主题与暗黑模式
-document.body.setAttribute('data-theme', store.state.app.theme || 'default')
+const BLACK_GOLD_THEME = 'black-gold'
+const initialTheme = store.state.app.darkMode ? BLACK_GOLD_THEME : (store.state.app.theme || 'default')
+document.body.setAttribute('data-theme', initialTheme)
 if (store.state.app.darkMode) {
   document.body.classList.add('theme-dark')
 }

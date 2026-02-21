@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container script-data-page">
+  <div class="app-container script-data-page script-data-blackgold-page">
     <div class="page-header">
       <h2>脚本数据</h2>
       <p>管理手机号队列与数据上传</p>

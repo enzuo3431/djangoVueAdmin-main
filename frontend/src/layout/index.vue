@@ -1,5 +1,6 @@
 <template>
   <div class="app-wrapper" :class="classObj">
+    <black-gold-ambient />
     <sidebar class="sidebar-container" />
     <div class="main-container">
       <div class="fixed-header">
@@ -15,6 +16,7 @@
 import { mapGetters } from 'vuex'
 import { Navbar, Sidebar, AppMain } from './components'
 import TagsView from '@/components/TagsView'
+import BlackGoldAmbient from '@/components/BlackGoldAmbient'
 
 export default {
   name: 'Layout',
@@ -22,7 +24,8 @@ export default {
     Navbar,
     Sidebar,
     AppMain,
-    TagsView
+    TagsView,
+    BlackGoldAmbient
   },
   computed: {
     ...mapGetters([

@@ -7,6 +7,8 @@ import tagsView from './modules/tagsView'
 
 Vue.use(Vuex)
 
+const BLACK_GOLD_THEME = 'black-gold'
+
 const store = new Vuex.Store({
   modules: {
     user,
@@ -58,15 +60,18 @@ const store = new Vuex.Store({
         toggleDevice({ commit }, device) {
           commit('TOGGLE_DEVICE', device)
         },
-        setTheme({ commit }, theme) {
+        setTheme({ commit, state }, theme) {
           commit('SET_THEME', theme)
           localStorage.setItem('theme', theme)
-          document.body.setAttribute('data-theme', theme)
+          const targetTheme = state.darkMode ? BLACK_GOLD_THEME : theme
+          document.body.setAttribute('data-theme', targetTheme)
         },
         toggleDarkMode({ commit, state }) {
           commit('TOGGLE_DARK')
           localStorage.setItem('darkMode', state.darkMode ? '1' : '0')
           document.body.classList.toggle('theme-dark', state.darkMode)
+          const targetTheme = state.darkMode ? BLACK_GOLD_THEME : (state.theme || 'default')
+          document.body.setAttribute('data-theme', targetTheme)
         }
       }
     }

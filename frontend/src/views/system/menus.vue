@@ -1,5 +1,5 @@
 <template>
-  <div class="menu-container">
+  <div class="menu-container system-menus-page">
     <div class="page-header">
       <div class="header-left">
         <h2>菜单管理</h2>

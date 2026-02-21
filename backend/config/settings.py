@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'apps.core.apps.CoreConfig',
     'apps.authentication.apps.AuthenticationConfig',
     'apps.script.apps.ScriptConfig',
+    'apps.data_management.apps.DataManagementConfig',
+    'apps.tools_management.apps.ToolsManagementConfig',
 ]
 
 MIDDLEWARE = [
@@ -219,17 +221,19 @@ SPECTACULAR_SETTINGS = {
 }
 
 
-# 缓存（权限缓存）
+# Redis
+REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
+
+# 缓存（默认使用 Redis）
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'django-vue-admin-cache',
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': REDIS_URL,
+        'KEY_PREFIX': 'django_vue_admin',
+        'TIMEOUT': 300,
     }
 }
 
 
 # 多端登录控制（最大会话数，0 表示不限制）
 AUTH_MAX_SESSIONS = int(os.getenv('AUTH_MAX_SESSIONS', '1'))
-
-# Redis
-REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/0')

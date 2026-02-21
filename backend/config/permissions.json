@@ -279,7 +279,7 @@
       "path": "/api/sessions/"
     },
     {
-      "__comment": "=== 脚本管理: 三条配置、支付宝配置 ==="
+      "__comment": "=== 脚本管理: 三条配置、脚本数据 ==="
     },
     {
       "name": "脚本管理",
@@ -301,22 +301,13 @@
       "sort_order": 310
     },
     {
-      "name": "支付宝配置",
-      "code": "script:zhifubao",
-      "type": "menu",
-      "path": "/script/zhifubao",
-      "component": "script/zhifubao/index",
-      "parent_code": "system:script",
-      "sort_order": 320
-    },
-    {
       "name": "脚本数据",
       "code": "script:data",
       "type": "menu",
       "path": "/script/data",
       "component": "script/data/index",
       "parent_code": "system:script",
-      "sort_order": 330
+      "sort_order": 320
     },
     {
       "name": "脚本配置列表",
@@ -371,6 +362,161 @@
       "code": "script:config:delete",
       "type": "api",
       "path": "/api/script/configs/"
+    },
+    {
+      "__comment": "=== 数据管理: 归档数据 ==="
+    },
+    {
+      "name": "数据管理",
+      "code": "system:data-manage",
+      "type": "menu",
+      "path": "/data-management",
+      "component": "Layout",
+      "icon": "el-icon-folder-opened",
+      "redirect": "/data-management/archive",
+      "sort_order": 400
+    },
+    {
+      "name": "归档数据",
+      "code": "data:archive",
+      "type": "menu",
+      "path": "/data-management/archive",
+      "component": "data/archive/index",
+      "parent_code": "system:data-manage",
+      "sort_order": 410
+    },
+    {
+      "name": "归档数据列表",
+      "code": "data:archive:list",
+      "type": "api",
+      "path": "/api/data-management/archive/"
+    },
+    {
+      "name": "归档平台元数据",
+      "code": "data:archive:platform:meta",
+      "type": "api",
+      "path": "/api/data-management/archive/platform-meta/"
+    },
+    {
+      "name": "创建归档数据",
+      "code": "data:archive:add",
+      "type": "api",
+      "path": "/api/data-management/archive/create/"
+    },
+    {
+      "name": "编辑归档数据",
+      "code": "data:archive:edit",
+      "type": "api",
+      "path": "/api/data-management/archive/"
+    },
+    {
+      "name": "删除归档数据",
+      "code": "data:archive:delete",
+      "type": "api",
+      "path": "/api/data-management/archive/"
+    },
+    {
+      "name": "导入归档数据",
+      "code": "data:archive:import",
+      "type": "api",
+      "path": "/api/data-management/archive/import/"
+    },
+    {
+      "name": "同步归档数据",
+      "code": "data:archive:sync",
+      "type": "api",
+      "path": "/api/data-management/archive/sync/"
+    },
+    {
+      "__comment": "=== 工具管理: 活动福利、六扇门ID提取、批量生成昵称、文件拆分 ==="
+    },
+    {
+      "name": "工具管理",
+      "code": "system:tools",
+      "type": "menu",
+      "path": "/tools-management",
+      "component": "Layout",
+      "icon": "el-icon-s-tools",
+      "redirect": "/tools-management/benefits",
+      "sort_order": 500
+    },
+    {
+      "name": "活动福利",
+      "code": "tools:benefits",
+      "type": "menu",
+      "path": "/tools-management/benefits",
+      "component": "tools/benefits/index",
+      "parent_code": "system:tools",
+      "sort_order": 510
+    },
+    {
+      "name": "六扇门ID提取",
+      "code": "tools:liushan",
+      "type": "menu",
+      "path": "/tools-management/liushan",
+      "component": "tools/liushan/index",
+      "parent_code": "system:tools",
+      "sort_order": 520
+    },
+    {
+      "name": "批量生成昵称",
+      "code": "tools:nickname",
+      "type": "menu",
+      "path": "/tools-management/nickname",
+      "component": "tools/nickname/index",
+      "parent_code": "system:tools",
+      "sort_order": 530
+    },
+    {
+      "name": "文件拆分",
+      "code": "tools:file-split",
+      "type": "menu",
+      "path": "/tools-management/file-split",
+      "component": "tools/file-split/index",
+      "parent_code": "system:tools",
+      "sort_order": 540
+    },
+    {
+      "name": "活动福利统计",
+      "code": "tools:benefits:stats",
+      "type": "api",
+      "path": "/api/tools/benefits/stats/"
+    },
+    {
+      "name": "活动福利上传",
+      "code": "tools:benefits:upload",
+      "type": "api",
+      "path": "/api/tools/benefits/upload/"
+    },
+    {
+      "name": "六扇门新增",
+      "code": "tools:liushan:add",
+      "type": "api",
+      "path": "/api/tools/liushan/add/"
+    },
+    {
+      "name": "六扇门列表",
+      "code": "tools:liushan:list",
+      "type": "api",
+      "path": "/api/tools/liushan/list/"
+    },
+    {
+      "name": "六扇门更新状态",
+      "code": "tools:liushan:update",
+      "type": "api",
+      "path": "/api/tools/liushan/update-status/"
+    },
+    {
+      "name": "昵称生成",
+      "code": "tools:nickname:generate",
+      "type": "api",
+      "path": "/api/tools/nickname/generate/"
+    },
+    {
+      "name": "文件拆分执行",
+      "code": "tools:file-split:run",
+      "type": "api",
+      "path": "/api/tools/file-split/run/"
     },
     {
       "__comment": "=== 个人中心 (不在菜单显示，仅右上角入口) ==="
@@ -451,8 +597,28 @@
         "user:export",
         "system:script",
         "script:santiao",
-        "script:zhifubao",
         "script:data",
+        "system:data-manage",
+        "data:archive",
+        "data:archive:list",
+        "data:archive:platform:meta",
+        "data:archive:add",
+        "data:archive:edit",
+        "data:archive:delete",
+        "data:archive:import",
+        "data:archive:sync",
+        "system:tools",
+        "tools:benefits",
+        "tools:liushan",
+        "tools:nickname",
+        "tools:file-split",
+        "tools:benefits:stats",
+        "tools:benefits:upload",
+        "tools:liushan:add",
+        "tools:liushan:list",
+        "tools:liushan:update",
+        "tools:nickname:generate",
+        "tools:file-split:run",
         "script:config:list",
         "script:config:add",
         "script:config:edit",
@@ -490,8 +656,28 @@
         "data:rule:list",
         "system:script",
         "script:santiao",
-        "script:zhifubao",
         "script:data",
+        "system:data-manage",
+        "data:archive",
+        "data:archive:list",
+        "data:archive:platform:meta",
+        "data:archive:add",
+        "data:archive:edit",
+        "data:archive:delete",
+        "data:archive:import",
+        "data:archive:sync",
+        "system:tools",
+        "tools:benefits",
+        "tools:liushan",
+        "tools:nickname",
+        "tools:file-split",
+        "tools:benefits:stats",
+        "tools:benefits:upload",
+        "tools:liushan:add",
+        "tools:liushan:list",
+        "tools:liushan:update",
+        "tools:nickname:generate",
+        "tools:file-split:run",
         "script:config:list",
         "script:queue:list",
         "script:queue:upload"
@@ -518,8 +704,19 @@
         "data:rule:list",
         "system:script",
         "script:santiao",
-        "script:zhifubao",
         "script:data",
+        "system:data-manage",
+        "data:archive",
+        "data:archive:list",
+        "data:archive:platform:meta",
+        "system:tools",
+        "tools:benefits",
+        "tools:liushan",
+        "tools:nickname",
+        "tools:file-split",
+        "tools:benefits:stats",
+        "tools:liushan:list",
+        "tools:nickname:generate",
         "script:config:list",
         "script:queue:list"
       ]
@@ -545,8 +742,19 @@
         "data:rule:list",
         "system:script",
         "script:santiao",
-        "script:zhifubao",
         "script:data",
+        "system:data-manage",
+        "data:archive",
+        "data:archive:list",
+        "data:archive:platform:meta",
+        "system:tools",
+        "tools:benefits",
+        "tools:liushan",
+        "tools:nickname",
+        "tools:file-split",
+        "tools:benefits:stats",
+        "tools:liushan:list",
+        "tools:nickname:generate",
         "script:config:list",
         "script:queue:list"
       ]

@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container system-login-logs-page">
     <div class="page-header">
       <div class="header-left">
         <h2>登录日志</h2>
